@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    int n, i;
+    double *arr;
+
+    printf("Введите количество элементов: ");
+    if (scanf("%d", &n) != 1 || n < 1) {
+        printf("Некорректный размер массива\n");
+        return 1;
+    }
+
+    arr = malloc(n * sizeof(double));
+    if (arr == NULL) {
+        printf("Не удалось выделить память\n");
+        return 1;
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("Элемент %d: ", i + 1);
+        scanf("%lf", arr + i);
+    }
+
+    printf("Элементы массива:");
+    for (i = 0; i < n; i++) {
+        printf(" %g", *(arr + i));
+    }
+    printf("\n");
+
+    free(arr);
+    return 0;
+}

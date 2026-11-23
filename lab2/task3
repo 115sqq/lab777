@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    int rows, cols, i, j;
+    double **a;      
+    double *b;       
+
+    printf("Введите число строк и столбцов: ");
+    if (scanf("%d %d", &rows, &cols) != 2 || rows < 1 || cols < 1) {
+        printf("Некорректные размеры\n");
+        return 1;
+    }
+    a = malloc(rows * sizeof(double *));
+    if (a == NULL) {
+        printf("Не удалось выделить память\n");
+        return 1;
+    }
+    for (i = 0; i < rows; i++) {
+        *(a + i) = malloc(cols * sizeof(double));
+        if (*(a + i) == NULL) {
+            printf("Не удалось выделить память\n");
+            for (j = 0; j < i; j++) {
+                free(*(a + j));
+            }
+            free(a);
+            return 1;
+        }
+    }
+    b = malloc(rows * cols * sizeof(double));
+    if (b == NULL) {
+        printf("Не удалось выделить память\n");
+        for (i = 0; i < rows; i++) {
+            free(*(a + i));
+        }
+        free(a);
+        return 1;
+    }
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            a[i][j] = i * cols + j + 1;
+            b[i * cols + j] = i * cols + j + 1;
+        }
+    }
+
+    printf("Классический способ:\n");
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            printf("%6.1f", a[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("Непрерывный способ:\n");
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            printf("%6.1f", b[i * cols + j]);
+        }
+        printf("\n");
+    }
+    for (i = 0; i < rows; i++) {
+        free(*(a + i));
+    }
+    free(a);
+    free(b);
+
+    return 0;
+}
